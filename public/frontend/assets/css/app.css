@@ -1,0 +1,206 @@
+@media screen and (min-width: 992px) {
+    .swiper.swiper-class-previews,
+    .swiper.swiper-quick-study {
+        overflow: visible;
+        transform: translateX(51%);
+    }
+
+    .swiper.swiper-news-update {
+        overflow: visible;
+        transform: translateX(102.5%);
+    }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+input:focus {
+  box-shadow: none;
+}
+
+/* Untuk placeholder seperti 'mm/dd/yyyy' */
+/* input[type="date"]::placeholder,
+input[type="time"]::placeholder {
+  color: #323334;
+} */
+
+/* Untuk Firefox - agar placeholder pada date/time bisa diatur */
+/* input[type="date"]::-moz-placeholder,
+input[type="time"]::-moz-placeholder {
+  color: #323334;
+} */
+
+/* Untuk WebKit (Chrome, Safari) */
+/* input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field {
+  color: #323334;
+} */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* warna scrollbar */
+  border-radius: 9999px; /* biar bulat */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tab-btn {
+  background-color: black;
+  color: #717171;
+}
+
+.tab-btn.active {
+  background-color: #232323;
+  color: white;
+}
+
+/* #calendar {
+  max-width: 900px;
+  border-radius: 12px;
+} */
+
+/* START DROPZONE */
+.dropzone {
+  background-color: #0F1012;
+  border: 1px solid #181A1C;
+  border-radius: 14px;
+}
+
+.custom-preview {
+  background-color: #0F1012;
+  color: #28B700;
+  padding: 10px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80%;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* END DROPZONE */
+
+/* START FULLCALENDAR */
+#calendar {
+  overflow: hidden !important;
+}
+
+.fc .fc-scrollgrid-liquid {
+  border: none !important;
+}
+
+.fc .fc-daygrid-day {
+  border: none !important;
+}
+
+.fc .fc-col-header-cell {
+  border: none !important;
+}
+
+.fc .fc-event {
+  border: none !important;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: none !important;
+  vertical-align: middle !important;
+}
+
+.fc-scroller {
+  overflow: hidden !important;
+}
+
+.fc .fc-daygrid-day.fc-day-other {
+  visibility: hidden;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+  min-height: unset;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc .fc-daygrid-day-frame {
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+.fc .fc-daygrid-day-top {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc .fc-daygrid-day-number {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #444444;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: unset !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top a {
+  width: 35px !important;
+  height: 35px !important;
+  background-color: black !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.fc .fc-bg-event {
+  opacity: 1 !important;
+  border-radius: 23px;
+}
+
+.fc .fc-timegrid-col.fc-day-today {
+  background-color: transparent !important;
+}
+
+/* .fc .fc-timegrid-slot {
+  height: 45px !important;
+} */
+
+.fc .fc-timegrid-slot-label {
+  font-size: 13px;
+}
+/* END FULLCALENDAR */
+
+[x-cloak] {
+    display: none !important;
+}
