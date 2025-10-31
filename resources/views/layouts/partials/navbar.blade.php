@@ -40,7 +40,7 @@
                 <ul class="text-sm text-gray-700">
                     <li>
                         @if (Auth::user()->account_type === 'student')
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                            <a href="{{ route('student.profile') }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
                         @endif
                     </li>
                     <li>

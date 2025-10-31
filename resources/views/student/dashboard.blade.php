@@ -446,14 +446,14 @@
                                 @foreach ($subscriptions as $subscription)
                                     @php $hasSubscription = true; @endphp
                                     <div
-                                        class="border border-gray-510 rounded-[21px] p-6 flex flex-col lg:flex-row justify-between gap-5 bg-gray-925">
+                                        class="border border-gray-510 rounded-[21px] p-6 flex flex-col lg:flex-row justify-between gap-5 bg-gray-925 mb-5">
                                         <div class="flex flex-col gap-2 text-white">
                                             <h6 class="text-[18px] font-semibold">
                                                 {{ $subscription->name ?? 'Subscription Plan' }}</h6>
                                             <span class="text-gray-300 text-[14px]">Subscribed on:
                                                 {{ \Carbon\Carbon::parse($subscription->created_at)->format('d M Y') }}</span>
                                             <span class="text-gray-300 text-[14px]">Expires on:
-                                                {{ $subscription->ends_at ? \Carbon\Carbon::parse($subscription->ends_at)->format('d M Y') : 'No Expiration' }}</span>
+                                                {{ $subscription->end_date ? \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') : 'No Expiration' }}</span>
 
                                             <div class="mt-4">
                                                 <span class="text-gray-275 text-[13px]">Status :</span>

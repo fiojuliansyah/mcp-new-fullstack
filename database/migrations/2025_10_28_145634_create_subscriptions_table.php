@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('form_id')->nullable();
-            $table->foreignId('schedule_id')->nullable();
+            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
+            $table->string('schedule_day')->nullable();
             $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
 
             $table->decimal('price', 10, 2);

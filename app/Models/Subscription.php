@@ -12,8 +12,8 @@ class Subscription extends Model
     protected $fillable = [
         'invoice_number',
         'user_id',
-        'form_id',
-        'schedule_id',
+        'classroom_id',
+        'schedule_day',
         'plan_id',
         'price',
         'coupon_id',
@@ -47,11 +47,6 @@ class Subscription extends Model
     public function form()
     {
         return $this->belongsTo(Form::class);
-    }
-
-    public function schedule()
-    {
-        return $this->belongsTo(Schedule::class);
     }
 
     public function plan()

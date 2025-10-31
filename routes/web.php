@@ -20,10 +20,12 @@ use App\Http\Controllers\Webhook\ZoomWebhookController;
 use App\Http\Controllers\Admin\AdminClassroomController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Tutor\TutorDashboardController;
+use App\Http\Controllers\Student\StudentProfileController;
 use App\Http\Controllers\Tutor\TutorReplayVideoController;
 use App\Http\Controllers\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Student\StudentClassroomController;
 use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\StudentEnrollmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,14 +36,26 @@ Route::get('/', function () {
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
     
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [StudentProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [StudentProfileController::class, 'update'])->name('profile.update');
+    
     Route::get('/classes/{classroom}/join', [StudentClassroomController::class, 'index'])->name('classrooms.index');
     Route::get('/classes/{classroom}/detail', [StudentClassroomController::class, 'show'])->name('classrooms.show');
 
-    Route::get('/quizzes/{quiz}/preview', [StudentQuizController::class, 'preview'])->name('quizzes.preview');
-    Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'storeAnswer'])->name('quizzes.submit');
-    Route::get('/quizzes/{quiz}/attempt/{attempt}/view-answer', [StudentQuizController::class, 'viewAnswer'])->name('quizzes.viewAnswer');
-    Route::get('/quizzes/{quiz}/detail', [StudentQuizController::class, 'show'])->name('quizzes.show');
-    Route::get('/quizzes/{quiz}/start', [StudentQuizController::class, 'start'])->name('quizzes.start');
+    Route::prefix('quizzes')->name('quizzes.')->group(function () {
+        Route::get('/{quiz}/preview', [StudentQuizController::class, 'preview'])->name('preview');
+        Route::post('/{quiz}/submit', [StudentQuizController::class, 'storeAnswer'])->name('submit');
+        Route::get('/{quiz}/attempt/{attempt}/view-answer', [StudentQuizController::class, 'viewAnswer'])->name('viewAnswer');
+        Route::get('/{quiz}/detail', [StudentQuizController::class, 'show'])->name('show');
+        Route::get('/{quiz}/start', [StudentQuizController::class, 'start'])->name('start');
+    });
+
+    Route::prefix('enrollment')->name('enrollment.')->group(function () {
+        Route::get('/class-type', [StudentEnrollmentController::class, 'classType'])->name('class-type');
+        Route::get('/checkout', [StudentEnrollmentController::class, 'checkout'])->name('checkout');
+        Route::post('/store/enrollment', [StudentEnrollmentController::class, 'store'])->name('store');
+    });
+    
 });
 
 

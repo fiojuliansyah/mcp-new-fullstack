@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('status', ['active','suspend'])->default('active');
             $table->string('parent_id')->nullable();
+            $table->string('language')->default('english');
             $table->rememberToken();
             $table->timestamps();
         });

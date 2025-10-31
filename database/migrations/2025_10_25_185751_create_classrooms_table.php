@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->foreignId('subject_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('form_id')->constrained()->cascadeOnDelete();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->enum('status',['active', 'deactive'])->default('active');

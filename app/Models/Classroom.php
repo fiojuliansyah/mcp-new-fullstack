@@ -42,4 +42,9 @@ class Classroom extends Model
     {
         return $this->belongsToMany(Subscription::class, 'classroom_subscription');
     }
+
+    public function form()
+    {
+        return $this->belongsTo(Form::class);
+    }
 }
