@@ -10,11 +10,14 @@ return new class extends Migration
     {
         Schema::create('replay_views', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('replay_video_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('replay_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('schedule_id')->nullable()->constrained()->nullOnDelete(); 
-            $table->integer('watch_duration')->default(0);
-            $table->boolean('is_completed')->default(false);
+            $table->integer('view_number')->default(1);
+            $table->dateTime('started_at')->nullable();
+            $table->dateTime('ended_at')->nullable();
+            $table->integer('duration_watched')->nullable()->comment('in seconds'); 
+            $table->integer('last_position')->nullable()->comment('last watched position in seconds');
+            $table->unique(['replay_video_id', 'user_id', 'view_number']);
             $table->timestamps();
         });
     }

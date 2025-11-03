@@ -70,6 +70,15 @@
                                                 class="flex flex-col items-center">
                                                 <div
                                                     class="block bg-gray-50 hover:bg-gray-200 cursor-pointer w-[35px] h-[35px] rounded-full p-2 flex items-center justify-center">
+                                                    <img src="/admin/assets/icons/eye.svg" alt="Icon"
+                                                        class="size-5 text-black" />
+                                                </div>
+                                                <span class="text-[#5F5F5F] text-[10px]">Show</span>
+                                            </a>
+                                            <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}"
+                                                class="flex flex-col items-center">
+                                                <div
+                                                    class="block bg-gray-50 hover:bg-gray-200 cursor-pointer w-[35px] h-[35px] rounded-full p-2 flex items-center justify-center">
                                                     <img src="/admin/assets/icons/pencil.svg" alt="Icon"
                                                         class="size-5 text-black" />
                                                 </div>

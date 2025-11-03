@@ -12,14 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class StudentQuizController extends Controller
 {
-    // Preview sebelum mulai
     public function show(Quiz $quiz)
     {
         $quiz->load('questions');
         return view('student.quizzes.show', compact('quiz'));
     }
 
-    // Mulai quiz
     public function start(Quiz $quiz)
     {
         $user = Auth::user();

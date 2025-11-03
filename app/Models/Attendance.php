@@ -12,7 +12,9 @@ class Attendance extends Model
     protected $fillable = [
         'user_id',
         'schedule_id',
-        'date',
+        'join_time',
+        'out_time',
+        'duration_joined',
         'status',
     ];
 

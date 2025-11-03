@@ -42,9 +42,4 @@ class Replay extends Model
         return $this->hasMany(ReplayVideo::class);
     }
 
-    public function replayViews()
-    {
-        return $this->hasMany(ReplayView::class);
-    }
-
 }

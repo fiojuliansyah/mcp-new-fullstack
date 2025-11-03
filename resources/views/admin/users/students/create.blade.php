@@ -59,7 +59,7 @@
                 <div class="col-span-12 lg:col-span-6">
                     <label class="block mb-2 text-[15px] font-medium text-gray-200">Level</label>
                     <div class="relative">
-                        <select name="level"
+                        <select name="form_id"
                             class="appearance-none pr-10 bg-gray-1000 border border-gray-950 text-gray-75 rounded-[14px] w-full px-4 py-3">
                             <option value="">Select Level</option>
                             @foreach ($forms as $form)

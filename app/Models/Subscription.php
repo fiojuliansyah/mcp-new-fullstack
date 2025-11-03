@@ -17,10 +17,13 @@ class Subscription extends Model
         'plan_id',
         'price',
         'coupon_id',
+        'plusian_coupon_id',
         'payment_method',
         'payment_status',
         'total',
+        'subtotal',
         'status',
+        'payment_gateway_bill_id',
         'start_date',
         'end_date',
         'renewal_date',
@@ -32,6 +35,7 @@ class Subscription extends Model
         'renewal_date' => 'datetime',
         'price' => 'decimal:2',
         'total' => 'decimal:2',
+        'classroom_id' => 'array',
     ];
 
     public function user()
@@ -57,5 +61,10 @@ class Subscription extends Model
     public function coupon()
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    public function plusianCoupon()
+    {
+        return $this->belongsTo(Coupon::class, 'plusian_coupon_id', 'id');
     }
 }

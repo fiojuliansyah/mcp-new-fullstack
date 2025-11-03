@@ -41,13 +41,18 @@
                     <li>
                         @if (Auth::user()->account_type === 'student')
                             <a href="{{ route('student.profile') }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+
+                        @elseif (Auth::user()->account_type === 'parent')
+                            <a href="{{ route('parent.profile') }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+
+                        @else
                         @endif
                     </li>
                     <li>
                         @if (Auth::user()->account_type === 'student')
                             <a href="{{ route('student.dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>   
                         @elseif (Auth::user()->account_type === 'parent')
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>   
+                            <a href="{{ route('parent.dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>   
                         @else
                             <a href="{{ route('tutor.dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>   
                         @endif

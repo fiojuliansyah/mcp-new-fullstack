@@ -17,8 +17,8 @@
                         </summary>
                         <div class="bg-white/[0.03]">
                             <a href="{{ route('admin.users.student') }}" data-sidebar-link="user-management:students" class="block px-12 py-2 text-sm hover:bg-[#1E1E1F]">Students</a>
-                            <a href="./user-management-parent-view-1.1.html" data-sidebar-link="user-management:parents" class="block px-12 py-2 text-sm hover:bg-[#1E1E1F]">Parents</a>
-                            <a href="#" data-sidebar-link="user-management:tutors" class="block px-12 py-2 text-sm hover:bg-[#1E1E1F]">Tutors</a>
+                            <a href="{{ route('admin.users.parents.index') }}" data-sidebar-link="user-management:parents" class="block px-12 py-2 text-sm hover:bg-[#1E1E1F]">Parents</a>
+                            <a href="{{ route('admin.users.tutors.index') }}" data-sidebar-link="user-management:tutors" class="block px-12 py-2 text-sm hover:bg-[#1E1E1F]">Tutors</a>
                         </div>
                     </details>
                 </li>

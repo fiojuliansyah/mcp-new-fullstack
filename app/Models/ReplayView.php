@@ -10,25 +10,30 @@ class ReplayView extends Model
     use HasFactory;
 
     protected $fillable = [
+        'replay_video_id',
         'user_id',
-        'replay_id',
-        'schedule_id',
-        'watch_duration',
-        'is_completed',
+        'view_number',
+        'started_at',
+        'ended_at',
+        'duration_watched',
+        'last_position',
     ];
-
+    
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    public function replay()
+    
+    public function replayVideo()
     {
-        return $this->belongsTo(Replay::class);
-    }
-
-    public function schedule()
-    {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(ReplayVideo::class);
     }
 }

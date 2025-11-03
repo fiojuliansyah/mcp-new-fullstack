@@ -12,7 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('schedule_id')->constrained()->cascadeOnDelete();
-            $table->date('date')->nullable();
+            $table->dateTime('join_time')->nullable();
+            $table->dateTime('out_time')->nullable();
+            $table->integer('duration_joined')->nullable()->comment('in seconds'); 
             $table->enum('status', ['present', 'absent', 'late'])->default('present');
             $table->timestamps();
         });

@@ -15,15 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
+            $table->json('classroom_id')->nullable();
             $table->string('schedule_day')->nullable();
             $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
 
             $table->decimal('price', 10, 2);
             $table->foreignId('coupon_id')->nullable();
+            $table->foreignId('plusian_coupon_id')->nullable();
             $table->string('payment_method');
             $table->string('payment_status')->default('unpaid');
             $table->decimal('total', 10, 2);
+            $table->decimal('subtotal', 10, 2)->nullable();
+            $table->string('payment_gateway_bill_id')->nullable();
             
             $table->string('status')->default('pending')->index();
             $table->dateTime('start_date');

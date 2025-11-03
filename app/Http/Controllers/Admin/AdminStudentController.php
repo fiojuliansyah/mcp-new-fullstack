@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Form;
 use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -38,6 +40,7 @@ class AdminStudentController extends Controller
 
         $user = new User();
         $user->name = $validated['name'];
+        $parent->slug = Str::slug($validated['name']);
         $user->email = $validated['email'];
         $user->password = Hash::make($validated['password']);
         $user->gender = $validated['gender'] ?? null;
@@ -91,13 +94,43 @@ class AdminStudentController extends Controller
 
     public function show($id)
     {
-        $user = User::with([
+        $student = User::with([
             'parent',
-            'subscriptions.classrooms.subject',
-            'subscriptions.plan'
+            'subscriptions.plan',
+            'subscriptions.classrooms' => fn($q) => $q->with([
+                'subject', 
+                'user',
+                'schedules' => fn($q) => $q->with([
+                    'attendances' => fn($q2) => $q2->where('user_id', $id)->whereIn('status', ['present', 'late']),
+                    'quizzes.attempts' => fn($q2) => $q2->where('user_id', $id),
+                    'replays.replayVideos.views' => fn($q2) => $q2->where('user_id', $id),
+                    'replays.replayVideos'
+                ])
+            ])
         ])->findOrFail($id);
-
-        return view('admin.users.students.show', compact('user'));
+        
+        return view('admin.users.students.show', compact('student')); 
     }
 
+    public function detail($id)
+    {
+        $student = User::with([
+            'parent',
+            'subscriptions.plan',
+            'subscriptions.classrooms' => fn($q) => $q->with([
+                'subject', 
+                'user',
+                'schedules' => fn($q) => $q->with([
+                    'attendances' => fn($q2) => $q2->where('user_id', $id)->whereIn('status', ['present', 'late']),
+                    'quizzes.attempts' => fn($q2) => $q2->where('user_id', $id),
+                    'replays.replayVideos.views' => fn($q2) => $q2->where('user_id', $id),
+                    'replays.replayVideos'
+                ])
+            ])
+        ])->findOrFail($id);
+
+        $latestSubscription = Subscription::where('user_id', $student->id)->latest()->first();
+
+        return view('admin.users.students.detail', compact('student','latestSubscription'));
+    }
 }

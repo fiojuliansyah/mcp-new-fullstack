@@ -187,11 +187,11 @@
                                                                 </div>
                                                                 <span
                                                                     class="text-white mb-5">{{ $quiz->title ?? ($schedule->topic ?? 'Quiz') }}</span>
-                                                                <button type="button"
-                                                                    class="bg-gray-50 hover:bg-gray-200 rounded-full text-sm px-5 py-3 w-[195px] cursor-pointer">
+                                                                <a href="{{ route('student.quizzes.show', $quiz->id) }}"
+                                                                    class="bg-gray-50 hover:bg-gray-200 rounded-full text-sm px-5 py-3 w-[195px] cursor-pointer text-center">
                                                                     <span class="text-black text-[16px] font-semibold">Start
                                                                         Quiz</span>
-                                                                </button>
+                                                                    </a>
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -230,7 +230,7 @@
                                                 @foreach ($schedule->replays as $replay)
                                                     @foreach ($replay->replayVideos as $video)
                                                         @php $hasReplay = true; @endphp
-                                                        <div data-modal-target="modal-{{ $video->id }}"
+                                                        <a href="{{ route('student.replay.show', [ 'replay' => $replay->id, 'video_id' => $video->id ]) }}"
                                                             class="flex flex-col items-center justify-center gap-3 bg-black rounded-[21px] border border-gray-850 h-[250px] cursor-pointer overflow-hidden relative group">
                                                             <img data-video-thumb="{{ asset('storage/replays/' . basename($video->video_url)) }}"
                                                                 class="video-thumb w-full h-full object-cover rounded-[21px]" />
@@ -241,7 +241,7 @@
                                                                 <span
                                                                     class="text-[12px] text-white text-center px-2">{{ $schedule->topic ?? 'Replay' }}</span>
                                                             </div>
-                                                        </div>
+                                                        </a>
                                                     @endforeach
                                                 @endforeach
                                             @endforeach
@@ -272,7 +272,6 @@
                                 <h6 class="text-[20px] text-gray-75 font-semibold">Student Log</h6>
                             </div>
 
-                            <!-- CONTENT -->
                             <div class="grid grid-cols-12 gap-6 lg:gap-10">
                                 <!-- TABS -->
                                 <div class="col-span-12 lg:col-span-8 lg:pr-5">
@@ -392,40 +391,56 @@
 
 
                             <!-- TAB My Subjects -->
-                            <div id="my-subjects" data-group="group-tabs-2" class="tab-content hidden my-10">
+                            <div id="my-subjects" data-group="group-tabs-2" class="tab-content my-10 hidden">
+                                @foreach ($mockMetrics as $metric)
                                 <div class="bg-gray-975 rounded-[21px] p-10 mt-10 grid grid-cols-12">
+                                    
                                     <div class="col-span-12 lg:col-span-4 lg:pr-10">
-                                        <div class="text-white mb-3">Form 2 (2025)</div>
+                                        <div class="text-white mb-3">Form {{ $metric['form'] }}</div>
                                         <div class="flex flex-col gap-3">
-                                            <span class="text-gray-200">Filter By Subject:</span>
-                                            <form class="w-full">
-                                                <select
-                                                    class="bg-gray-1000 border border-gray-950 text-white placeholder:text-gray-500 rounded-[14px] w-full px-4 py-3">
-                                                    <option selected>Filter</option>
-                                                    <option value="" selected>Add Math</option>
-                                                </select>
-                                            </form>
+                                            <span class="text-gray-200">Current Subject:</span>
+                                            <div
+                                                class="bg-gray-1000 border border-gray-950 text-white placeholder:text-gray-500 rounded-[14px] w-full px-4 py-3 font-semibold">
+                                                {{ $metric['subject'] }}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 lg:col-span-4 border-x border-gray-510 lg:px-10">
-                                        <div>
-                                            <div class="flex items-center gap-2 mb-5">
+                                    
+                                    <div class="col-span-12 lg:col-span-4 border-x border-gray-510 lg:px-10 mt-6 lg:mt-0">
+                                        <div class="mb-6">
+                                            <div class="flex items-center gap-2 mb-2">
                                                 <span class="text-gray-275 text-[15px]">Topics Covers:</span>
-                                                <span class="text-white text-[15px]">4/10</span>
+                                                <span class="text-white text-[15px]">{{ $metric['topics_covered'] }}/{{ $metric['total_schedules'] }}</span>
                                             </div>
-                                            <div class="text-gray-275 text-[15px] mb-2">Progress:</div>
+                                            <div class="text-gray-275 text-[15px] mb-2">Overall Progress:</div>
                                             <div class="w-full lg:border border-[#523E06] rounded-full h-5">
-                                                <div class="bg-[#523E06] h-5 rounded-full flex items-center justify-end px-3"
-                                                    style="width: 30%">
-                                                    <span class="text-white text-[12px]">30%</span>
+                                                <div class="bg-[#523E06] h-5 rounded-full flex items-center justify-end px-3 transition-all duration-500"
+                                                    style="width: {{ $metric['overall_progress'] }}%">
+                                                    <span class="text-white text-[12px] font-medium">{{ $metric['overall_progress'] }}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-4">
+                                            <div class="text-gray-275 text-[15px] mb-2">Attendance Rate:</div>
+                                            <div class="w-full lg:border border-indigo-700/50 rounded-full h-5">
+                                                <div class="bg-indigo-700/70 h-5 rounded-full flex items-center justify-end px-3 transition-all duration-500"
+                                                    style="width: {{ $metric['attendance_rate'] }}%">
+                                                    <span class="text-white text-[12px] font-medium">{{ $metric['attendance_rate'] }}%</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 lg:col-span-4 lg:ps-10">
-                                        <div class="flex flex-col items-center">
+                                    
+                                    <div class="col-span-12 lg:col-span-4 lg:ps-10 mt-6 lg:mt-0">
+                                        <div class="flex flex-col items-center mb-6">
                                             <span class="text-gray-275 text-[15px]">Avg Quiz Score:</span>
-                                            <span class="text-white text-[56px]">78%</span>
+                                            <span class="text-white text-[56px] font-bold">{{ $metric['avg_quiz_score'] }}%</span>
+                                        </div>
+
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-gray-275 text-[15px]">Avg Replay Watch:</span>
+                                            <span class="text-white text-[56px] font-bold">{{ $metric['avg_replay_watch'] }}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -436,6 +451,7 @@
                                         <span class="text-black text-[16px] font-semibold">Continue Learning</span>
                                     </button>
                                 </div>
+                                @endforeach
                             </div>
 
                             <!-- TAB Subscription Info -->
@@ -565,25 +581,6 @@
 
             $(`.tab-btn[data-group='${group}']`).removeClass("active");
             $(this).addClass("active");
-        });
-
-        document.querySelectorAll("[data-modal-target]").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const target = btn.getAttribute("data-modal-target");
-                document.getElementById(target).classList.remove("hidden");
-            });
-        });
-
-        document.querySelectorAll("[data-modal-close]").forEach(btn => {
-            btn.addEventListener("click", () => {
-                btn.closest("div[id^='modal']").classList.add("hidden");
-            });
-        });
-
-        document.querySelectorAll("div[id^='modal']").forEach(modal => {
-            modal.addEventListener("click", e => {
-                if (e.target === modal) modal.classList.add("hidden");
-            });
         });
     </script>
 @endpush

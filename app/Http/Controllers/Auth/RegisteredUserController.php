@@ -7,6 +7,7 @@ use App\Models\Form;
 use App\Models\User;
 use App\Mail\OtpMail;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
@@ -99,6 +100,7 @@ class RegisteredUserController extends Controller
         $fullPhone = trim($validated['phone_prefix']) . trim($validated['phone']);
         $updateData = [
             'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
             'ic_number' => $validated['ic_number'],
             'gender' => $validated['gender'],
             'phone' => $fullPhone,

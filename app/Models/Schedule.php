@@ -75,10 +75,4 @@ class Schedule extends Model
     {
         return $this->hasMany(Attendance::class);
     }
-
-    public function replayViews()
-    {
-        return $this->hasMany(ReplayView::class);
-    }
-
 }

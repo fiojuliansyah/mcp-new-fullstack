@@ -18,4 +18,17 @@ class ReplayVideo extends Model
     {
         return $this->belongsTo(Replay::class);
     }
+
+    public function views()
+    {
+        return $this->hasMany(ReplayView::class);
+    }
+
+    public function totalWatchedByUser($userId)
+    {
+        return $this->views()
+            ->where('user_id', $userId)
+            ->sum('duration_watched');
+    }
+
 }

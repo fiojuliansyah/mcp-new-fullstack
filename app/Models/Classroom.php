@@ -38,13 +38,18 @@ class Classroom extends Model
         return $this->hasOne(Schedule::class)->latestOfMany();
     }
 
+    public function form()
+    {
+        return $this->belongsTo(Form::class);
+    }
+
     public function subscriptions()
     {
         return $this->belongsToMany(Subscription::class, 'classroom_subscription');
     }
 
-    public function form()
+    public function students()
     {
-        return $this->belongsTo(Form::class);
+        return $this->belongsToMany(User::class, 'subscriptions', 'classroom_id', 'user_id');
     }
 }

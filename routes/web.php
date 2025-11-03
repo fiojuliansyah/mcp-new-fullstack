@@ -6,8 +6,10 @@ use App\Http\Controllers\ZoomSignatureController;
 use App\Http\Controllers\Admin\AdminPlanController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Tutor\TutorQuizController;
+use App\Http\Controllers\Admin\AdminTutorController;
 use App\Http\Controllers\Tutor\TutorClassController;
 use App\Http\Controllers\Admin\AdminCouponController;
+use App\Http\Controllers\Admin\AdminParentController;
 use App\Http\Controllers\Admin\AdminReplayController;
 use App\Http\Controllers\Admin\AdminStudentController;
 use App\Http\Controllers\Admin\AdminMaterialController;
@@ -19,10 +21,15 @@ use App\Http\Controllers\Tutor\TutorScheduleController;
 use App\Http\Controllers\Webhook\ZoomWebhookController;
 use App\Http\Controllers\Admin\AdminClassroomController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Tutor\TutorDashboardController;
+use App\Http\Controllers\Student\StudentReplayController;
+use App\Http\Controllers\Parent\ParentDashboardController;
+use App\Http\Controllers\Student\StudentPaymentController;
 use App\Http\Controllers\Student\StudentProfileController;
 use App\Http\Controllers\Tutor\TutorReplayVideoController;
 use App\Http\Controllers\Admin\AdminSubscriptionController;
+use App\Http\Controllers\Student\StudentScheduleController;
 use App\Http\Controllers\Student\StudentClassroomController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentEnrollmentController;
@@ -38,9 +45,16 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [StudentProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update', [StudentProfileController::class, 'update'])->name('profile.update');
-    
+    Route::get('/replay/{replay}/video', [StudentReplayController::class, 'show'])->name('replay.show');
+    Route::post('/replay/track-progress/{replay_video}', [StudentReplayController::class, 'trackProgress'])->name('replay.track-progress');
+
     Route::get('/classes/{classroom}/join', [StudentClassroomController::class, 'index'])->name('classrooms.index');
     Route::get('/classes/{classroom}/detail', [StudentClassroomController::class, 'show'])->name('classrooms.show');
+    
+    Route::get('/join/{schedule}/zoom', [StudentScheduleController::class, 'class'])->name('schedule.class');
+    Route::get('/join/{schedule}/zoom/embed', [StudentScheduleController::class, 'embed'])->name('schedule.zoom');
+    Route::post('/attendance/join/{scheduleId}', [StudentScheduleController::class, 'recordJoin'])->name('attendance.join');
+    Route::post('/attendance/out/{scheduleId}', [StudentScheduleController::class, 'recordOut'])->name('attendance.out');
 
     Route::prefix('quizzes')->name('quizzes.')->group(function () {
         Route::get('/{quiz}/preview', [StudentQuizController::class, 'preview'])->name('preview');
@@ -53,14 +67,33 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::prefix('enrollment')->name('enrollment.')->group(function () {
         Route::get('/class-type', [StudentEnrollmentController::class, 'classType'])->name('class-type');
         Route::get('/checkout', [StudentEnrollmentController::class, 'checkout'])->name('checkout');
+        Route::get('/{subscription}/timetable', [StudentEnrollmentController::class, 'timetable'])->name('timetable');
         Route::post('/store/enrollment', [StudentEnrollmentController::class, 'store'])->name('store');
+        Route::get('/{subscription}/summary', [StudentEnrollmentController::class, 'summary'])->name('summary');
+        Route::post('/subscription/{id}/voucher', [StudentEnrollmentController::class, 'applyVoucher'])->name('applyVoucher');
+        Route::post('/subscription/{id}/remove-voucher', [StudentEnrollmentController::class,'removeVoucher'])->name('removeVoucher');
+        Route::post('/subscription/{id}/plusian/voucher', [StudentEnrollmentController::class, 'applyPlusian'])->name('applyPlusian');
+        Route::post('/subscription/{id}/plusian/remove-voucher', [StudentEnrollmentController::class,'removePlusian'])->name('removePlusian');
+        Route::post('/subscription/{id}/update-plan', [StudentEnrollmentController::class,'updatePlan'])->name('updatePlan');
+
+        Route::get('/{subscription}/payment', [StudentPaymentController::class, 'index'])->name('payment');
+        Route::post('/{subscription}/process-payment', [StudentPaymentController::class, 'processPayment'])->name('processPayment');
+
+        Route::post('/payment/billplz/webhook', [StudentPaymentController::class, 'billplzWebhook'])->name('payment.billplzWebhook');
+        Route::get('/payment/{subscription}/callback', [StudentPaymentController::class, 'paymentCallback'])->name('payment.paymentCallback');
+        Route::get('/payment-success/{subscription}', [StudentPaymentController::class, 'paymentSuccess'])->name('payment.paymentSuccess');
+
     });
     
 });
 
 
-Route::middleware('auth')->prefix('parent.')->group(function () {
-    
+Route::middleware('auth')->prefix('parent')->name('parent.')->group(function () {
+    Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{slug}', [ParentDashboardController::class, 'show'])->name('dashboard.child');
+
+    Route::get('/profile', [ParentProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [ParentProfileController::class, 'update'])->name('profile.update');
 
 });
 
@@ -127,10 +160,25 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
             Route::post('/students/store', [AdminStudentController::class, 'store'])->name('student.store');
             Route::get('/students/{id}/edit', [AdminStudentController::class, 'edit'])->name('student.edit');
             Route::put('/students/{id}/update', [AdminStudentController::class, 'update'])->name('student.update');
-            Route::get('/students/{id}/detail', [AdminStudentController::class, 'show'])->name('student.show');
-
-            Route::get('/parents', [AdminUserController::class, 'parent'])->name('parent');
-            Route::get('/tutors', [AdminUserController::class, 'tutor'])->name('tutor');
+            Route::get('/students/{id}/show', [AdminStudentController::class, 'show'])->name('student.show');
+            Route::get('/students/{id}/detail', [AdminStudentController::class, 'detail'])->name('student.detail');
+            
+            
+            Route::get('/parents', [AdminParentController::class, 'index'])->name('parents.index');
+            Route::get('/parents/create', [AdminParentController::class, 'create'])->name('parents.create');
+            Route::post('/parents/store', [AdminParentController::class, 'store'])->name('parents.store');
+            Route::get('/parents/{id}/edit', [AdminParentController::class, 'edit'])->name('parents.edit');
+            Route::put('/parents/{id}/update', [AdminParentController::class, 'update'])->name('parents.update');
+            Route::get('/parents/{id}/show', [AdminParentController::class, 'show'])->name('parents.show');
+            Route::get('/parents/{id}/detail', [AdminParentController::class, 'detail'])->name('parents.detail');
+            
+            Route::get('/tutors', [AdminTutorController::class, 'index'])->name('tutors.index');
+            Route::get('/tutors/create', [AdminTutorController::class, 'create'])->name('tutors.create');
+            Route::post('/tutors/store', [AdminTutorController::class, 'store'])->name('tutors.store');
+            Route::get('/tutors/{id}/edit', [AdminTutorController::class, 'edit'])->name('tutors.edit');
+            Route::put('/tutors/{id}/update', [AdminTutorController::class, 'update'])->name('tutors.update');
+            Route::get('/tutors/{id}/show', [AdminTutorController::class, 'show'])->name('tutors.show');
+            Route::get('/tutors/{id}/detail', [AdminTutorController::class, 'detail'])->name('tutors.detail');
         }); 
         
         Route::resource('plans', AdminPlanController::class);

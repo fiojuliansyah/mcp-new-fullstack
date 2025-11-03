@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('code')->unique();
 
-            $table->enum('type', ['percentage', 'fixed']);
+            $table->enum('type', ['percentage', 'fixed', 'plusian']);
             $table->integer('value');
 
             $table->dateTime('expired_at')->nullable();

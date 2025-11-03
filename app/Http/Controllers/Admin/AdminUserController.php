@@ -12,21 +12,6 @@ use Illuminate\Support\Facades\Crypt;
 
 class AdminUserController extends Controller
 {
-    public function index()
-    {
-        $users = User::paginate(10);
-        return view('admin.users.index', compact('users'));
-    }
 
-    public function parent()
-    {
-        $users = User::where('account_type', 'parent')->paginate(10);
-        return view('admin.users.parents.index', compact('users'));
-    }
-
-    public function tutor()
-    {
-        $users = User::where('account_type', 'tutor')->paginate(10);
-        return view('admin.users.tutors.index', compact('users'));
-    }
+    
 }

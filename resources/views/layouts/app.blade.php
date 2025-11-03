@@ -102,30 +102,6 @@
 			</div>
 		</div>
 	</footer>
-	<div id="modal-1" id="myModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-		<!-- BACKDROP -->
-		<div class="absolute inset-0 bg-black opacity-50"></div>
-
-		<!-- MODAL CONTENT -->
-		<div class="bg-white p-6 rounded-[20px] shadow-lg relative z-10 w-[947px] text-center">
-			<h2 class="text-xl font-medium mb-1 text-[28px]">Add Math</h2>
-			<p class="mb-3">Topic Name Here Long Long Topic Name</p>
-			<div
-				class="flex flex-col items-center justify-center gap-3 bg-black rounded-[21px] border border-gray-850 h-[400px] mb-3 cursor-pointer">
-				<img src="../assets/icons/replay.svg" alt="Icon" class="w-16">
-			</div>
-			<div class="flex items-center justify-center bg-[#181818] rounded-[9px] py-2">
-				<input id="default-checkbox" type="checkbox" value=""
-					class="w-6 h-6 rounded-lg bg-gray-100 border-gray-300">
-				<label for="default-checkbox" class="ms-2 text-sm font-medium text-white text-[15px]">Mark as
-					watched</label>
-			</div>
-			<button data-modal-close
-				class="mt-4 bg-gray-50 hover:bg-gray-100 text-black font-semibold text-[16px] py-2 px-4 rounded-full w-full cursor-pointer">
-				Close
-			</button>
-		</div>
-	</div>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	@stack('scripts')

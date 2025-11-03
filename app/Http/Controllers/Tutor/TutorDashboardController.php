@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tutor;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Subject;
 use App\Models\Schedule;
 use App\Models\Classroom;
@@ -30,7 +31,7 @@ class TutorDashboardController extends Controller
 
         $selectedSubject = Subject::where('slug', $slug)->firstOrFail();
 
-        $classrooms = Classroom::with(['subject', 'schedules.quizzes.attempts', 'schedules.attendances', 'schedules.replayViews'])
+        $classrooms = Classroom::with(['subject', 'schedules.quizzes.attempts', 'schedules.attendances'])
             ->where('user_id', $user->id)
             ->where('subject_id', $selectedSubject->id)
             ->get();
@@ -38,7 +39,8 @@ class TutorDashboardController extends Controller
         $subjects = Subject::all();
 
         $coloredDates = [];
-        $scheduleIds = [];
+        $classroomIds = $classrooms->pluck('id')->toArray();
+        $allSchedules = collect();
 
         foreach ($classrooms as $classroom) {
             foreach ($classroom->schedules as $schedule) {
@@ -55,44 +57,48 @@ class TutorDashboardController extends Controller
                     'canceled' => '#B70000',
                     default => '#737373',
                 };
-
-                $scheduleIds[] = $schedule->id;
+                
+                $allSchedules->push($schedule);
             }
         }
 
-        $scheduleIds = array_unique($scheduleIds);
+        $scheduleIds = $allSchedules->pluck('id')->unique()->toArray();
+        $replayVideoIds = $allSchedules->pluck('replay_video_id')->filter()->unique()->toArray();
+        $quizIds = $allSchedules->flatMap(fn($s) => $s->quizzes->pluck('id'))->unique()->toArray();
 
         $subscriptions = Subscription::with([
             'user',
-            'schedule.quizzes.attempts',
-            'schedule.attendances',
-            'schedule.replayViews'
+            'classroom'
         ])
-        ->whereIn('schedule_id', $scheduleIds)
+        ->whereIn('classroom_id', $classroomIds)
         ->get()
         ->groupBy('user_id');
 
+        $studentIds = $subscriptions->keys()->toArray();
+        
+        $studentsData = User::with([
+            'replayViews' => fn($q) => $q->whereIn('replay_video_id', $replayVideoIds),
+            'attendances' => fn($q) => $q->whereIn('schedule_id', $scheduleIds),
+            'quizAttempts' => fn($q) => $q->whereIn('quiz_id', $quizIds),
+        ])
+        ->whereIn('id', $studentIds)
+        ->get();
+
         $students = [];
-        foreach ($subscriptions as $userId => $subs) {
-            $userSub = $subs->first()->user;
-            $userSchedules = $subs->pluck('schedule')->filter();
-            $totalSchedules = $userSchedules->count();
+        $totalSchedules = $allSchedules->count();
+        
+        foreach ($studentsData as $student) {
+            $attendedCount = $student->attendances->count();
+            $replayCount = $student->replayViews->count();
 
-            $allScores = $userSchedules->flatMap(fn($schedule) =>
-                $schedule->quizzes->flatMap(fn($quiz) =>
-                    $quiz->attempts->where('user_id', $userId)->pluck('score')
-                )
-            );
-
+            $allScores = $student->quizAttempts->pluck('score');
             $avgScore = $allScores->avg() ?? 0;
-            $attendedCount = $userSchedules->sum(fn($schedule) => $schedule->attendances->where('user_id', $userId)->count());
-            $replayCount = $userSchedules->sum(fn($schedule) => $schedule->replayViews->where('user_id', $userId)->count());
 
             $attendanceRate = $totalSchedules > 0 ? round(($attendedCount / $totalSchedules) * 100, 1) : 0;
             $replayRate = $totalSchedules > 0 ? round(($replayCount / $totalSchedules) * 100, 1) : 0;
 
             $students[] = [
-                'user' => $userSub,
+                'user' => $student,
                 'avgScore' => round($avgScore, 1),
                 'attendanceRate' => $attendanceRate,
                 'replayRate' => $replayRate,
@@ -108,10 +114,10 @@ class TutorDashboardController extends Controller
         $today = Carbon::now();
         $in7days = $today->copy()->addDays(7);
 
-        $subsQuery = Subscription::whereIn('schedule_id', $scheduleIds);
+        $subsQuery = Subscription::whereIn('classroom_id', $classroomIds);
 
-        $allCount = (clone $subsQuery)->distinct('user_id')->count('user_id');
-        $activeCount = (clone $subsQuery)->whereDate('end_date', '>', $in7days)->count();
+        $allCount = $studentsData->count();
+        $activeCount = (clone $subsQuery)->whereDate('end_date', '>', $today)->count();
         $expiringSoonCount = (clone $subsQuery)->whereDate('end_date', '>', $today)->whereDate('end_date', '<=', $in7days)->count();
         $expiredCount = (clone $subsQuery)->whereDate('end_date', '<=', $today)->count();
 
@@ -124,7 +130,8 @@ class TutorDashboardController extends Controller
             'activeCount',
             'expiringSoonCount',
             'expiredCount',
-            'overview'
+            'overview',
+            'students'
         ));
     }
 

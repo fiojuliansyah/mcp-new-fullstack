@@ -64,9 +64,13 @@
                                                 <span
                                                     class="text-white text-[15px]">{{ $classroom->user->name ?? 'Unknown' }}</span>
                                             </div>
-                                            @php
-                                                $firstFile =
-                                                    $schedule->materials->first()->materialFiles->first() ?? null;
+                                         @php
+                                                $firstMaterial = $schedule->materials->first() ?? null;
+                                                
+                                                $firstFile = null;
+                                                if ($firstMaterial) {
+                                                    $firstFile = $firstMaterial->materialFiles->first() ?? null;
+                                                }
                                             @endphp
 
                                             @if ($firstFile)
@@ -82,7 +86,7 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col flex-1">
-                                        <a href="{{ $schedule->zoom_join_url }}"
+                                        <a href="{{ route('student.schedule.class', $schedule->id) }}"
                                             class="bg-gray-50 hover:bg-gray-200 rounded-full text-sm px-5 py-3 w-full mt-auto cursor-pointer text-center">
                                             <span class="text-black text-[16px] font-semibold">Join Zoom</span>
                                         </a>
