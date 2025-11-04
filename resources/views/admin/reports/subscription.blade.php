@@ -66,34 +66,15 @@
                                     </td>
                                     <td class="p-4 border border-gray-700">
                                         <div class="flex items-center justify-center gap-3">
-                                            <a href="{{ route('admin.subscriptions.show', $subscription->id) }}"
+                                            <a href="#"
                                                 class="flex flex-col items-center">
                                                 <div
                                                     class="block bg-gray-50 hover:bg-gray-200 cursor-pointer w-[35px] h-[35px] rounded-full p-2 flex items-center justify-center">
-                                                    <img src="/admin/assets/icons/eye.svg" alt="Icon"
-                                                        class="size-5 text-black" />
+                                                    <img src="/admin/assets/icons/file.svg" alt="Icon"
+                                                        class="size-5 text-black invert" />
                                                 </div>
-                                                <span class="text-[#5F5F5F] text-[10px]">Show</span>
+                                                <span class="text-white text-[10px]">Export</span>
                                             </a>
-                                            <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}"
-                                                class="flex flex-col items-center">
-                                                <div
-                                                    class="block bg-gray-50 hover:bg-gray-200 cursor-pointer w-[35px] h-[35px] rounded-full p-2 flex items-center justify-center">
-                                                    <img src="/admin/assets/icons/pencil.svg" alt="Icon"
-                                                        class="size-5 text-black" />
-                                                </div>
-                                                <span class="text-[#5F5F5F] text-[10px]">Edit</span>
-                                            </a>
-                                            <button type="button"
-                                                onclick="openDeleteModal('{{ $subscription->id }}', '{{ $subscription->invoice_number ?? 'Subscription' }}')"
-                                                class="flex flex-col items-center">
-                                                <div
-                                                    class="block bg-gray-50 hover:bg-gray-200 cursor-pointer w-[35px] h-[35px] rounded-full p-2 flex items-center justify-center">
-                                                    <img src="/admin/assets/icons/trash.svg" alt="Delete"
-                                                        class="size-4 text-white" />
-                                                </div>
-                                                <span class="text-[#5F5F5F] text-[10px]">Delete</span>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>

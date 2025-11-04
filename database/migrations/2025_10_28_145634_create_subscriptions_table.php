@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('invoice_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->json('classroom_id')->nullable();
-            $table->string('schedule_day')->nullable();
+            $table->json('schedule_day')->nullable();
             $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
 
             $table->decimal('price', 10, 2);
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('payment_gateway_bill_id')->nullable();
             
             $table->string('status')->default('pending')->index();
+            $table->text('cancel_reason')->nullable();
             $table->dateTime('start_date');
             $table->dateTime('end_date')->nullable();
             $table->dateTime('renewal_date')->nullable();

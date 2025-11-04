@@ -156,7 +156,8 @@
                                     <div class="text-sm mt-3">
                                         <p class="text-gray-100">{{ $schedule->classroom->name ?? 'N/A' }},
                                             {{ $schedule->form->name ?? 'N/A' }}</p>
-                                        <p class="text-gray-100">{{ $schedule->classroom->subject->name ?? 'Subject N/A' }}</p>
+                                        <p class="text-gray-100">{{ $schedule->classroom->subject->name ?? 'Subject N/A' }}
+                                        </p>
                                     </div>
                                 </div>
                                 <a href="{{ route($routePrefix, ['schedule_id' => $schedule->id]) }}"
@@ -183,50 +184,50 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                             <!-- Donut -->
                             <div class="flex items-center justify-center">
+                                @php
+                                    $quizPercent = $performance['avgQuizScore'];
+                                    $dashOffset = 282.6 - ($quizPercent / 100) * 282.6;
+                                @endphp
                                 <div class="relative">
                                     <svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
                                         <circle cx="50" cy="50" r="45" stroke="rgba(255,255,255,0.15)"
                                             stroke-width="10" fill="none" />
                                         <circle cx="50" cy="50" r="45" stroke="#8B5CF6" stroke-width="10"
-                                            stroke-linecap="round" stroke-dasharray="282.6" stroke-dashoffset="62"
-                                            fill="none" />
+                                            stroke-linecap="round" stroke-dasharray="282.6"
+                                            stroke-dashoffset="{{ $dashOffset }}" fill="none" />
                                     </svg>
                                     <div class="absolute inset-0 flex items-center justify-center">
-                                        <p class="text-xl font-bold">78%</p>
+                                        <p class="text-xl font-bold">{{ $quizPercent }}%</p>
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Big number -->
                             <div class="text-center">
-                                <p class="text-5xl font-semibold leading-none">2</p>
+                                <p class="text-5xl font-semibold leading-none">{{ $performance['subjectsUnder60'] }}</p>
+                                <p class="text-sm text-white/60 mt-2">Subjects under 60%</p>
                             </div>
+
                             <!-- Subjects bars -->
                             <div class="space-y-4 w-full">
-                                <div>
-                                    <div class="flex items-center justify-between text-sm mb-1">
-                                        <p class="text-white/80">Add Math</p>
-                                        <p class="font-semibold">5</p>
+                                @foreach ($performance['subjectsPerformance']->take(3) as $subject)
+                                    <div>
+                                        <div class="flex items-center justify-between text-sm mb-1">
+                                            <p class="text-white/80">{{ $subject->subject->name ?? 'Unknown' }}</p>
+                                            <p class="font-semibold">{{ round($subject->avg_score, 1) }}%</p>
+                                        </div>
+                                        <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full bg-gradient-to-r from-rose-400 to-amber-200"
+                                                style="width: {{ $subject->avg_score }}%"></div>
+                                        </div>
                                     </div>
-                                    <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                        <div class="h-full rounded-full bg-gradient-to-r from-rose-400 to-amber-200"
-                                            style="width:72%"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex items-center justify-between text-sm mb-1">
-                                        <p class="text-white/80">Science</p>
-                                        <p class="font-semibold">4</p>
-                                    </div>
-                                    <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                        <div class="h-full rounded-full bg-sky-500" style="width:58%"></div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
 
                         <!-- Legend -->
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-white/80">
-                            <div class="flex items-start items-center lg:justify-center gap-2">
+                            <div class="flex items-center lg:justify-center gap-2">
                                 <img src="/admin/assets/icons/quiz-1.svg" alt="Icon">
                                 <span>Avg Quiz Score</span>
                             </div>
@@ -236,19 +237,20 @@
                             </div>
                             <div class="flex items-center lg:justify-center gap-2">
                                 <img src="/admin/assets/icons/graduation-1.svg" alt="Icon">
-                                <span>Students low attendance</span>
+                                <span>{{ $performance['lowAttendanceStudents'] }} students low attendance</span>
                             </div>
                         </div>
 
-                        <!-- Button inside card -->
                         <div class="mt-6">
-                            <button type="button"
-                                class="bg-gray-50 hover:bg-gray-200 rounded-full text-sm px-5 py-3 cursor-pointer w-full">
+                            <a href="{{ route('admin.performances.index') }}"
+                                class="flex justify-center items-center bg-gray-50 hover:bg-gray-200 rounded-full text-sm px-5 py-3 cursor-pointer w-full">
                                 <span class="text-black text-[16px] font-semibold">View All</span>
-                            </button>
+                            </a>
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

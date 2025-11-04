@@ -27,6 +27,7 @@ class Subscription extends Model
         'start_date',
         'end_date',
         'renewal_date',
+        'cancel_reason',
     ];
 
     protected $casts = [
@@ -66,5 +67,10 @@ class Subscription extends Model
     public function plusianCoupon()
     {
         return $this->belongsTo(Coupon::class, 'plusian_coupon_id', 'id');
+    }
+
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\Classroom;
 use App\Models\Subscription;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -36,7 +37,7 @@ class AdminSubscriptionController extends Controller
             'price' => 'required|numeric|min:0',
             'payment_method' => 'required|string|max:50',
             'total' => 'required|numeric|min:0',
-            'status' => ['required', Rule::in(['pending', 'active', 'cancelled', 'expired', 'on_hold'])],
+            'status' => ['required', Rule::in(['pending', 'active', 'cancelled', 'expired', 'on_hold', 'refunded'])],
             'payment_status' => ['required', Rule::in(['unpaid', 'paid', 'failed', 'refunded'])],
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -50,10 +51,18 @@ class AdminSubscriptionController extends Controller
         $subscription = Subscription::create($validated);
         $subscription->classrooms()->sync($classroomIds);
 
+        if ($subscription->status === 'refunded') {
+            Refund::create([
+                'subscription_id' => $subscription->id,
+                'amount' => $subscription->total,
+                'bank' => 'N/A',
+                'reason' => 'Auto refund on creation',
+            ]);
+        }
+
         return redirect()->route('admin.subscriptions.index')
             ->with('success', 'Subscription successfully created!');
     }
-
 
     public function edit($id)
     {
@@ -78,6 +87,8 @@ class AdminSubscriptionController extends Controller
         ]);
 
         $subscription = Subscription::findOrFail($id);
+        $oldStatus = $subscription->status;
+
         $subscription->update([
             'user_id' => $request->user_id,
             'plan_id' => $request->plan_id,
@@ -86,13 +97,55 @@ class AdminSubscriptionController extends Controller
             'payment_status' => $request->payment_status,
             'total' => $request->total,
             'status' => $request->status,
+            'cancel_reason' => $request->cancel_reason,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]);
 
         $subscription->classrooms()->sync($request->classroom_id);
 
+        if ($oldStatus !== 'refunded' && $request->status === 'refunded') {
+            Refund::firstOrCreate(
+                ['subscription_id' => $subscription->id],
+                [
+                    'amount' => $subscription->subtotal,
+                    'bank' => $request->bank ?? 'Unknown',
+                    'reason' => 'Automatic refund because subscription marked as refunded.',
+                ]
+            );
+        }
+
         return redirect()->route('admin.subscriptions.index')->with('success', 'Subscription updated successfully.');
+    }
+
+    public function renewal($id)
+    {
+        $subscription = Subscription::findOrFail($id);
+        $users = User::where('account_type', 'student')->get();
+        $plans = Plan::all();
+        $classrooms = Classroom::with('subject')->get();
+        return view('admin.subscriptions.renewal', compact('subscription', 'users', 'plans', 'classrooms'));
+    }
+
+    public function refund($id)
+    {
+        $subscription = Subscription::findOrFail($id);
+        $users = User::where('account_type', 'student')->get();
+        $plans = Plan::all();
+        $classrooms = Classroom::with('subject')->get();
+        return view('admin.subscriptions.refund', compact('subscription', 'users', 'plans', 'classrooms'));
+    }
+
+    public function cancel($id)
+    {
+        $subscription = Subscription::with(['user.parent', 'plan', 'classrooms.subject', 'refunds'])->findOrFail($id);
+        return view('admin.subscriptions.cancel', compact('subscription'));
+    }
+
+    public function show($id)
+    {
+        $subscription = Subscription::with(['user.parent', 'plan', 'classrooms.subject', 'refunds'])->findOrFail($id);
+        return view('admin.subscriptions.show', compact('subscription'));
     }
 
     public function destroy($id)

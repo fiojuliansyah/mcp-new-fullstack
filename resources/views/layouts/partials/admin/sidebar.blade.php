@@ -56,14 +56,20 @@
                     </details>
                 </li>
                 <li>
-                    <a href="report-1.1.html" data-sidebar-link="report" class="flex items-center gap-3 px-4 py-4 hover:bg-[#1E1E1F] transition">
-                        <iconify-icon icon="solar:home-2-bold" class="text-white" width="20" height="20"></iconify-icon>
+                    <a href="{{ route('admin.performances.index') }}" data-sidebar-link="performance" class="flex items-center gap-3 px-4 py-4 hover:bg-[#1E1E1F] transition">
+                        <iconify-icon icon="solar:square-academic-cap-bold" class="text-white" width="20" height="20"></iconify-icon>
+                        <span class="text-sm">Stundent Performance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.reports.index') }}" data-sidebar-link="report" class="flex items-center gap-3 px-4 py-4 hover:bg-[#1E1E1F] transition">
+                        <iconify-icon icon="solar:clipboard-bold" class="text-white" width="20" height="20"></iconify-icon>
                         <span class="text-sm">Report</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" data-sidebar-link="customer-support" class="flex items-center gap-3 px-4 py-4 hover:bg-[#1E1E1F] transition">
-                        <iconify-icon icon="solar:home-2-bold" class="text-white" width="20" height="20"></iconify-icon>
+                    <a href="{{ route('admin.supports.index') }}" data-sidebar-link="customer-support" class="flex items-center gap-3 px-4 py-4 hover:bg-[#1E1E1F] transition">
+                        <iconify-icon icon="solar:letter-opened-bold" class="text-white" width="20" height="20"></iconify-icon>
                         <span class="text-sm">Customer Support</span>
                     </a>
                 </li>

@@ -7,6 +7,10 @@ use App\Models\Schedule;
 use App\Models\User;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use App\Models\QuizAttempt;
+use App\Models\Attendance;
+use App\Models\Subject;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -33,14 +37,12 @@ class AdminDashboardController extends Controller
             ->get();
 
         $pendingUploads = collect();
-
         foreach ($pendingMaterialsSchedules as $schedule) {
             $pendingUploads->push([
                 'schedule' => $schedule,
                 'missing_type' => 'Material'
             ]);
         }
-
         foreach ($pendingReplaysSchedules as $schedule) {
             $pendingUploads->push([
                 'schedule' => $schedule,
@@ -48,6 +50,39 @@ class AdminDashboardController extends Controller
             ]);
         }
 
-        return view('admin.dashboard', compact('schedules', 'studentCount', 'parentCount', 'tutorCount', 'subsCount', 'pendingUploads'));
+        $avgQuizScore = QuizAttempt::avg('score') ?? 0;
+
+        $subjectsPerformance = DB::table('quiz_attempts')
+            ->join('quizzes', 'quiz_attempts.quiz_id', '=', 'quizzes.id')
+            ->join('schedules', 'quizzes.schedule_id', '=', 'schedules.id')
+            ->join('classrooms', 'schedules.classroom_id', '=', 'classrooms.id')
+            ->join('subjects', 'classrooms.subject_id', '=', 'subjects.id')
+            ->select('subjects.name as subject_name', DB::raw('AVG(quiz_attempts.score) as avg_score'))
+            ->groupBy('subjects.name')
+            ->get();
+
+        $subjectsUnder60 = $subjectsPerformance->where('avg_score', '<', 60)->count();
+
+        $lowAttendanceStudents = Attendance::where('status', 'absent')
+            ->distinct('user_id')
+            ->count();
+
+        $performance = [
+            'avgQuizScore' => round($avgQuizScore, 2),
+            'subjectsUnder60' => $subjectsUnder60,
+            'lowAttendanceStudents' => $lowAttendanceStudents,
+            'subjectsPerformance' => $subjectsPerformance,
+        ];
+
+        return view('admin.dashboard', compact(
+            'schedules',
+            'studentCount',
+            'parentCount',
+            'tutorCount',
+            'subsCount',
+            'pendingUploads',
+            'performance'
+        ));
     }
+
 }

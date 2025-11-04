@@ -90,9 +90,40 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ReplayView::class);
     }
 
+    public function attempts()
+    {
+        return $this->hasMany(QuizAttempt::class);
+    }
+
     public function children()
     {
         return $this->hasMany(User::class, 'parent_id', 'id');
+    }
+
+    protected function avgQuizScore(): Attribute
+    {
+        return Attribute::get(function () {
+            $attempts = $this->attempts;
+            if ($attempts->isEmpty()) {
+                return 0;
+            }
+            return round($attempts->avg('score'), 2);
+        });
+    }
+
+    protected function attendanceRate(): Attribute
+    {
+        return Attribute::get(function () {
+            $attendances = $this->attendances;
+            if ($attendances->isEmpty()) {
+                return 0;
+            }
+
+            $total = $attendances->count();
+            $present = $attendances->where('status', 'present')->count();
+
+            return round(($present / $total) * 100, 2);
+        });
     }
 
 

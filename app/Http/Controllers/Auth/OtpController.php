@@ -66,6 +66,10 @@ class OtpController extends Controller
         if ($user->account_type === 'tutor') {
             return redirect()->route('tutor.dashboard');
         }
+
+        if ($user->account_type === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
     }
 
     public function resend(Request $request)

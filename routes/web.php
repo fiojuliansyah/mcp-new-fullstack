@@ -11,7 +11,9 @@ use App\Http\Controllers\Tutor\TutorClassController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminParentController;
 use App\Http\Controllers\Admin\AdminReplayController;
+use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminStudentController;
+use App\Http\Controllers\Admin\AdminSupportController;
 use App\Http\Controllers\Admin\AdminMaterialController;
 use App\Http\Controllers\Admin\AdminScheduleController;
 use App\Http\Controllers\Student\StudentQuizController;
@@ -23,7 +25,9 @@ use App\Http\Controllers\Admin\AdminClassroomController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Tutor\TutorDashboardController;
+use App\Http\Controllers\Admin\AdminAttendanceController;
 use App\Http\Controllers\Student\StudentReplayController;
+use App\Http\Controllers\Admin\AdminPerformanceController;
 use App\Http\Controllers\Parent\ParentDashboardController;
 use App\Http\Controllers\Student\StudentPaymentController;
 use App\Http\Controllers\Student\StudentProfileController;
@@ -183,8 +187,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         
         Route::resource('plans', AdminPlanController::class);
         Route::get('/plans/{id}/price', [AdminPlanController::class, 'getPrice'])->name('plans.price');
-
+        
         Route::resource('coupons', AdminCouponController::class);
+        Route::get('/subscriptions/{id}/renewal', [AdminSubscriptionController::class, 'renewal'])->name('subscriptions.renewal');
+        Route::get('/subscriptions/{id}/refund', [AdminSubscriptionController::class, 'refund'])->name('subscriptions.refund');
+        Route::get('/subscriptions/{id}/cancel', [AdminSubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
         Route::resource('subscriptions', AdminSubscriptionController::class);
         Route::resource('classrooms', AdminClassroomController::class);
 
@@ -197,6 +204,16 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::delete('/materials/file/{file}', [AdminMaterialController::class, 'deleteFile'])->name('materials.delete-file');
 
         Route::resource('schedules', AdminScheduleController::class);
+        
+        Route::get('/performances', [AdminPerformanceController::class, 'index'])->name('performances.index');
+        Route::get('/performances/{id}/show', [AdminPerformanceController::class, 'show'])->name('performances.show');
+        
+        Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
+        Route::get('/report/subscription', [AdminReportController::class, 'subscription'])->name('reports.subscription');
+        Route::get('/report/performance', [AdminReportController::class, 'performance'])->name('reports.performance');
+        Route::get('/report/replay', [AdminReportController::class, 'replay'])->name('reports.replay');
+        Route::resource('attendances', AdminAttendanceController::class);
+        Route::resource('supports', AdminSupportController::class);
 
 });
 
