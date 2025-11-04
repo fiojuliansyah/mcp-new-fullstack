@@ -1,3 +1,3 @@
 <p>Halo,</p>
-<p>Kode OTP kamu adalah: <strong>{{ $otp }}</strong></p>
-<p>Berlaku selama 5 menit.</p>
+<p>Your Code Is: <strong>{{ $otp }}</strong></p>
+<p>Valid for 5 minutes.</p>

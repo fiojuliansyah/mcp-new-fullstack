@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
             ['code' => $otp, 'expires_at' => now()->addMinutes(5)]
         );
 
-        Mail::raw("Kode OTP Anda adalah: {$otp}", function ($message) use ($user) {
+        Mail::raw("Your OTP code is: {$otp}", function ($message) use ($user) {
             $message->to($user->email)->subject('Kode OTP Login');
         });
 
