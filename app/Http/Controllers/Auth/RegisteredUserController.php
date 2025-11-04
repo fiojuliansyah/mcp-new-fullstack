@@ -88,7 +88,7 @@ class RegisteredUserController extends Controller
         ];
 
         if ($user->account_type === 'student') {
-            $rules['level'] = ['required', 'string', 'max:50'];
+            $rules['form_id'] = ['required', 'string', 'max:50'];
         }
 
         if ($user->account_type === 'parent') {
@@ -104,7 +104,7 @@ class RegisteredUserController extends Controller
             'ic_number' => $validated['ic_number'],
             'gender' => $validated['gender'],
             'phone' => $fullPhone,
-            'level' => $validated['level'] ?? null,
+            'form_id' => $validated['form_id'] ?? null,
             'postal_code' => $validated['postal_code'] ?? null,
         ];
 

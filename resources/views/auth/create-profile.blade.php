@@ -55,7 +55,7 @@
                         @if (Auth::user()->account_type === 'student')
                             <div class="w-full">
                                 <label for="level" class="text-sm text-zinc-600 pb-2 block">Level</label>
-                                <select id="level" name="level"
+                                <select id="level" name="form_id"
                                     class="w-full text-white bg-black rounded-md p-3 mt-1 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400">
                                     <option value="" disabled selected>Select Level</option>
                                     @foreach ($forms as $form)   
