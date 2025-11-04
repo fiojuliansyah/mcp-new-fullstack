@@ -2,139 +2,66 @@
 
 
 @section('content')
-    <section class="w-full overflow-hidden font-inter p-4">
-        <div class="w-full max-w-screen-xl mx-auto">
-            <p class="text-zinc-400">Class Previews</p>
-            <!-- CARD -->
-            <div class="w-full py-5">
-                <div class="swiper swiper-class-previews">
-                    <div class="swiper-wrapper">
+<section class="w-full overflow-hidden font-inter p-4">
+    <div class="w-full max-w-screen-xl mx-auto">
+        <p class="text-zinc-400">Class Previews</p>
+        <div class="w-full py-5">
+            <div class="swiper swiper-class-previews">
+                <div class="swiper-wrapper">
+                    @foreach ($classPreviews as $classroom)
+                        @php
+                            $schedule = $classroom->schedules->first();
+                        @endphp
                         <div class="swiper-slide">
                             <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
+                                <img src="{{ $classroom->user->avatar_url }}" alt="{{ $classroom->name }}" />
                                 <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
+                                    <h2 class="text-lg uppercase font-semibold font-bebas">
+                                        {{ $classroom->subject->name ?? 'Unknown Subject' }}
+                                    </h2>
+                                    <h1 class="text-2xl uppercase font-bold font-bebas">
+                                        {{ $schedule->form->name ?? 'No Form' }}
+                                    </h1>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="w-full overflow-hidden font-inter p-4">
-        <div class="w-full max-w-screen-xl mx-auto">
-            <p class="text-zinc-400">Quick Study</p>
-            <!-- CARD -->
-            <div class="w-full py-5">
-                <div class="swiper swiper-quick-study">
-                    <div class="swiper-wrapper">
+<section class="w-full overflow-hidden font-inter p-4">
+    <div class="w-full max-w-screen-xl mx-auto">
+        <p class="text-zinc-400">Quick Study</p>
+        <div class="w-full py-5">
+            <div class="swiper swiper-quick-study">
+                <div class="swiper-wrapper">
+                    @foreach ($quickStudies as $classroom)
+                        @php
+                            $schedule = $classroom->schedules->first();
+                        @endphp
                         <div class="swiper-slide">
                             <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
+                                <img src="{{ $classroom->user->avatar_url }}" alt="{{ $classroom->name }}" />
                                 <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
+                                    <h2 class="text-lg uppercase font-semibold font-bebas">
+                                        {{ $classroom->subject->name ?? 'Unknown Subject' }}
+                                    </h2>
+                                    <h1 class="text-2xl uppercase font-bold font-bebas">
+                                        {{ $schedule->form->name ?? 'No Form' }}
+                                    </h1>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="relative w-full flex justify-center items-center">
-                                <img src="/frontend/assets/images/person-card-example.png" alt="" />
-                                <div class="w-full h-full absolute inset-0 flex flex-col justify-end items-center text-center">
-                                    <h2 class="text-lg uppercase font-semibold font-bebas">Add Math</h2>
-                                    <h1 class="text-2xl uppercase font-bold font-bebas">Probability Distributions</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <section class="w-full overflow-hidden font-inter p-4">
         <div class="w-full max-w-screen-xl mx-auto">
