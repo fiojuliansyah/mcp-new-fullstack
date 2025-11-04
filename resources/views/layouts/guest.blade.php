@@ -32,12 +32,34 @@
                 <li>
                     <a href="/classess.html" class="text-xs uppercase">Classes</a>
                 </li>
-                <li>
-                    <a href="{{ route('register') }}" class="text-xs uppercase">Register</a>
-                </li>
-                <li>
-                    <a href="{{ route('started') }}" class="text-xs uppercase">Login</a>
-                </li>
+                @guest
+                    <li>
+                        <a href="{{ route('register') }}" class="text-xs uppercase">Register</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('started') }}" class="text-xs uppercase">Login</a>
+                    </li>
+                @endguest
+
+                @auth
+                    @if (Auth::user()->account_type === 'student')
+                        <li>
+                            <a href="{{ route('student.dashboard') }}" class="text-xs uppercase">Dashboard</a>
+                        </li>
+                    @elseif (Auth::user()->account_type === 'parent')
+                        <li>
+                            <a href="{{ route('parent.dashboard') }}" class="text-xs uppercase">Dashboard</a>
+                        </li>
+                    @elseif (Auth::user()->account_type === 'tutor')
+                        <li>
+                            <a href="{{ route('tutor.dashboard') }}" class="text-xs uppercase">Dashboard</a>
+                        </li>
+                    @else
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="text-xs uppercase">Dashboard</a>
+                        </li>
+                    @endif
+                @endauth
             </ul>
         </div>
     </nav>
