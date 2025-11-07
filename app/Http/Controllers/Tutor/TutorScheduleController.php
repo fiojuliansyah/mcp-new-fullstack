@@ -109,21 +109,21 @@ class TutorScheduleController extends Controller
             $schedule = Schedule::create([
                 'user_id'        => $tutor->id,
                 'classroom_id'   => $request->classroom_id,
-                'topic'        => $request->topic,
-                'form_id'    => $request->form_id,
-                'agenda'     => $request->agenda,
-                'type'       => 1,
-                'duration'   => $request->duration,
-                'time' => Carbon::parse($request->time, 'Asia/Jakarta'),
-                'timezone'   => 'Asia/Jakarta',
-                'password'   => $request->password ?? Str::random(8),
-                'status'     => 'scheduled',
-                'settings'   => $processedSettings,
+                'topic'          => $request->topic,
+                'form_id'        => $request->form_id,
+                'agenda'         => $request->agenda,
+                'type'           => 1,
+                'duration'       => $request->duration,
+                'time'           => Carbon::parse($request->time, 'Asia/Jakarta'),
+                'timezone'       => 'Asia/Jakarta',
+                'password'       => $request->password ?? Str::random(8),
+                'status'         => 'scheduled',
+                'settings'       => $processedSettings,
             ]);
 
             $response = Http::withToken($accessToken)
                 ->post("https://api.zoom.us/v2/users/{$tutor->email}/meetings", [
-                    'topic'        => $request->topic,
+                    'topic'      => $request->topic,
                     'agenda'     => $request->agenda,
                     'type'       => 2,
                     'start_time' => $schedule->time->toIso8601String(),
